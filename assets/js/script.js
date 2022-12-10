@@ -1,26 +1,70 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
-var timeDisplayE1 = $('#time-display');
-var currentDayEl = $('#currentDay');
-var timeBlockEl = $('.time-block')
+var currentDayEl = $('#current-day');
+var timeBlockPastEl = $('.row time-block past');
+var timeBlockPresentEl = $('.row time-block present');
+var timeBlockFutureEl = $('.row time-block future');
+var descriptionEl = $('.description');
+var hourXEl = $('#hour-x');
 
 function displayTime() {
   var rightNow = dayjs().format('MMM DD, YYYY [at] hh:mm:ss a');
-  timeDisplayEl.text(rightNow);
+  currentDayEl.text(rightNow);
 }
 
-function readSchedulerFromStorage() {
-  var scheduler = localStorage.getItem('scheduler');
-  if (scheduler) {
-    scheduler = JSON.parse(scheduler);
+function readDescriptionFromStorage() {
+  var description = localStorage.getItem('description');
+  if (description) {
+    description = JSON.parse(description);
   } else {
-    scheduler = [];
+    description = [];
   }
-  return scheduler;
+  return description;
 }
+
+function saveDescriptionToStorage(description) {
+  localStorage.setItem('description', JSON.stringify (description));
+}
+
+function printDescriptiontData() {
+  
+  description.empty();
+
+  
+  var description = readDescriptionFromStorage();
 
 $(function () {
+  var timeBlockEl = [
+    '9AM',
+    '10AM',
+    '11AM',
+    '12PM',
+    '1PM',
+    '2PM',
+    '3PM',
+    '4PM',
+    '5PM',
+  ];
+  $('.row time-block ').autocomplete({
+    source: timeBlockEl,
+  });
+});
+
+  for (var i = 0; i < timeBlock.length; i ++) {
+    var timeBlock = timeBlock[i];
+    var timeBlock = dayjs(timeBlock.date);
+    
+    var hourX = dayjs().startOf('hour');
+
+    if (timeBlock.isBefore(past)) {
+      rowEl.addClass('project-late');
+    } else if (timeBlock.isSame(present)) {
+      rowEl.addClass('project-today');
+    } else (timeBlock.isAfter(future)) {
+      rowEl.addClass('');
+    };
+
     // TODO: Add a listener for click events on the save button. This code should
     // use the id in the containing time-block as a key to save the user input in
     // local storage. HINT: What does `this` reference in the click listener
@@ -39,6 +83,6 @@ $(function () {
     // attribute of each time-block be used to do this?
     //
     // TODO: Add code to display the current date in the header of the page.
-  });
   
-  //saveBtn.addEventListener('click', )
+  
+  saveBtn.addEventListener('click', descriptionEl);
