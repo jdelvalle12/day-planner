@@ -1,22 +1,36 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
+var containerFluidEl = $('.container-fluid');
 var currentDayEl = $('#current-day');
 var timeBlockPastEl = $('.row time-block past');
 var timeBlockPresentEl = $('.row time-block present');
 var timeBlockFutureEl = $('.row time-block future');
 var descriptionEl = $('.description');
-var hourXEl = $('#hour-x');
 
-function displayTime() {
-  var rightNow = dayjs().format('MMM DD, YYYY [at] hh:mm:ss a');
+//displaying date
+function displayCurrentDay() {
+  var rightNow = dayjs().format('MMM DD, YYYY');
   currentDayEl.text(rightNow);
 }
 
+//container-fluid element, to change the color in each background in each time block
+containerFluidEl.children('#hour-9').children('textarea').css('background-color', '#d3d3d3');
+containerFluidEl.children('#hour-10').children('textarea').css('background-color', '#d3d3d3');
+containerFluidEl.children('#hour-11').children('textarea').css('background-color', '#d3d3d3');
+containerFluidEl.children('#hour-12').children('textarea').css('background-color', '#ff6961');
+containerFluidEl.children('#hour-1').children('textarea').css('background-color', '#77dd77');
+containerFluidEl.children('#hour-2').children('textarea').css('background-color', '#77dd77');
+containerFluidEl.children('#hour-3').children('textarea').css('background-color', '#77dd77');
+containerFluidEl.children('#hour-4').children('textarea').css('background-color', '#77dd77');
+containerFluidEl.children('#hour-5').children('textarea').css('background-color', '#77dd77');
+
+
+
 function readDescriptionFromStorage() {
-  var description = localStorage.getItem('description');
-  if (description) {
-    description = JSON.parse(description);
+  var descriptionEl = localStorage.getItem('description');
+  if (descriptionEl) {
+    descriptionEl = JSON.parse(description);
   } else {
     description = [];
   }
@@ -24,13 +38,12 @@ function readDescriptionFromStorage() {
 }
 
 function saveDescriptionToStorage(description) {
-  localStorage.setItem('description', JSON.stringify (description));
+  localStorage.setItem('description', JSON.stringify(description));
 }
 
 function printDescriptiontData() {
-  
-  description.empty();
 
+  descriptionDisplayEl.empty();
   
   var description = readDescriptionFromStorage();
 
@@ -46,25 +59,41 @@ $(function () {
     '4PM',
     '5PM',
   ];
-  $('.row time-block ').autocomplete({
-    source: timeBlockEl,
-  });
 });
 
   for (var i = 0; i < timeBlock.length; i ++) {
     var timeBlock = timeBlock[i];
-    var timeBlock = dayjs(timeBlock.date);
+    var timeBlock = dayjs(timeBlock);
     
-    var hourX = dayjs().startOf('hour');
+    
 
-    if (timeBlock.isBefore(past)) {
-      rowEl.addClass('project-late');
-    } else if (timeBlock.isSame(present)) {
-      rowEl.addClass('project-today');
-    } else (timeBlock.isAfter(future)) {
-      rowEl.addClass('');
-    };
+    if (timeBlock < i) {
+      rowEl.addClass('past');
+    } else if (timeBlock === i) {
+      rowEl.addClass('present');
+    } else if (timeBlock > i) {
+      rowEl.addClass('future');
+    } else {
+      return false;
+    };   
+  }
+}
 
+function descriptionIndex() {
+  var descriptionIndex = parseInt($(this).attr('saveBtn'));
+  var description = readDescriptionFromStorage();
+  
+  saveProjectsToStorage(description);
+}
+
+function handleDescriptionSaveBtn(event) {
+  event.preventDefault();
+  document.addEventListener('click', saveBtn);
+  this.descriptionEl.on(saveBtn);
+  
+  
+
+}
     // TODO: Add a listener for click events on the save button. This code should
     // use the id in the containing time-block as a key to save the user input in
     // local storage. HINT: What does `this` reference in the click listener
@@ -81,8 +110,7 @@ $(function () {
     // TODO: Add code to get any user input that was saved in localStorage and set
     // the values of the corresponding textarea elements. HINT: How can the id
     // attribute of each time-block be used to do this?
-    //
-    // TODO: Add code to display the current date in the header of the page.
+
+  displayCurrentDay();
+  setInterval(displayCurrentDay, 1000);
   
-  
-  saveBtn.addEventListener('click', descriptionEl);
