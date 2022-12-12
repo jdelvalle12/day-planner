@@ -3,14 +3,11 @@
 // in the html.
 var containerFluidEl = $('.container-fluid');
 var currentDayEl = $('#current-day');
-var timeBlockPastEl = $('.row time-block past');
-var timeBlockPresentEl = $('.row time-block present');
-var timeBlockFutureEl = $('.row time-block future');
 var descriptionEl = $('.description');
 var saveBtnEl = $('.saveBtn');
 
+var description = [];
 
-var hour = ['hour-9, hour-10, hour-11, hour-12, hour-1, hour-2, hour-3, hour-4, hour-5'];
 //displaying date
 function displayCurrentDay() {
   var rightNow = dayjs().format('MMM DD, YYYY');
@@ -30,10 +27,38 @@ containerFluidEl.children('#hour-5').children('textarea').css('background-color'
 
 
 function saveDescriptionToStorage(description) {
+  console.log(saveDescriptionToStorage());
+  descriptionEl.innerHTML = "";
+  
+
   var description = document.getElementById("").value;
   localStorage.setItem('description', JSON.stringify(description));
+  saveDescriptionToStorage();
+
+  for (var i = 0; i < description.length; i++) {
+    var description = descriptions[i];
+
+    var li = document.createElement("li");
+    li.textContent = description;
+    li.setAttribute("data-index", i);
+
+    var button = document.createElement("button");
+    button.textContent = "save";
+
+    li.appendChild(button);
+    descriptionEl.appendChild(li)
 }
-//console.log(saveDescriptionToStorage());
+  saveBtnEl.addEventListener('click', function (e) {
+  e.preventDefault();
+  var description = document.querySelector('.description').value;
+
+  if (description === "") {
+  return;
+  }
+
+});
+}
+
 
 function readDescriptionFromStorage() {
   var description = localStorage.getItem('description');
@@ -45,7 +70,7 @@ function readDescriptionFromStorage() {
   return description;
 }
 
-function printDescriptiontData() {  
+function printDescriptionData() {  
   descriptionDisplayEl.empty();
   var description = readDescriptionFromStorage();
 $(function () {
@@ -53,7 +78,7 @@ $(function () {
 });
 
   for (var i = 0; i < description.length; i ++) {
-    var description = description[i];
+    var description = descriptions[i];
     var description = dayjs(description.hour);
     
     var hour = dayjs().startOf('hour');
@@ -76,18 +101,9 @@ $(function () {
   }
 }
 
-  saveBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    var description = document.querySelector('.description').value;
+ 
 
-    if (description === "") {
-    return;
-    } else {
-      
-    }  
-  });
-
-  this.descriptionEl.on(saveBtn);
+  this.descriptionEl.on(saveBtnEl);
 
     // TODO: Add a listener for click events on the save button. This code should
     // use the id in the containing time-block as a key to save the user input in
@@ -108,4 +124,5 @@ $(function () {
 
   displayCurrentDay();
   setInterval(displayCurrentDay, 1000);
-  //printDescriptiontData();
+  
+  printDescriptionData();
