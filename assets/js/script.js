@@ -1,16 +1,19 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+
 var containerFluidEl = $('.container-fluid');
 var currentDayEl = $('#current-day');
 var descriptionEl = $('.description');
 var saveBtnEl = $('.saveBtn');
+var timeBlockE1 = $('.time-block')
 
 var description = [];
 
+function init() {
+  displayCurrentDay();
+  printDescriptionData();
+}
 //displaying date
 function displayCurrentDay() {
-  var rightNow = dayjs().format('MMM DD, YYYY');
+  var rightNow = dayjs().format('MMM DD, YYYY[at] HH:mm:ss a');
   currentDayEl.text(rightNow);
 }
 
@@ -25,9 +28,9 @@ containerFluidEl.children('#hour-3').children('textarea').css('background-color'
 containerFluidEl.children('#hour-4').children('textarea').css('background-color', '#77dd77');
 containerFluidEl.children('#hour-5').children('textarea').css('background-color', '#77dd77');
 
-
+//Saving the description to storage
 function saveDescriptionToStorage(description) {
-  console.log(saveDescriptionToStorage());
+  
   descriptionEl.innerHTML = "";
   
 
@@ -35,7 +38,7 @@ function saveDescriptionToStorage(description) {
   localStorage.setItem('description', JSON.stringify(description));
   saveDescriptionToStorage();
 
-  for (var i = 0; i < description.length; i++) {
+  for (var i = 9; i <= description.length; i++) {
     var description = descriptions[i];
 
     var li = document.createElement("li");
@@ -47,19 +50,10 @@ function saveDescriptionToStorage(description) {
 
     li.appendChild(button);
     descriptionEl.appendChild(li)
-}
-  saveBtnEl.addEventListener('click', function (e) {
-  e.preventDefault();
-  var description = document.querySelector('.description').value;
-
-  if (description === "") {
-  return;
   }
+};
 
-});
-}
-
-
+//Getting the description from storage
 function readDescriptionFromStorage() {
   var description = localStorage.getItem('description');
   if (description) {
@@ -71,13 +65,11 @@ function readDescriptionFromStorage() {
 }
 
 function printDescriptionData() {  
-  descriptionDisplayEl.empty();
-  var description = readDescriptionFromStorage();
-$(function () {
   
-});
+  var description = readDescriptionFromStorage();
 
-  for (var i = 0; i < description.length; i ++) {
+
+  for (var i = 9; i <= description.length ; i ++) {
     var description = descriptions[i];
     var description = dayjs(description.hour);
     
@@ -101,28 +93,11 @@ $(function () {
   }
 }
 
- 
-
-  this.descriptionEl.on(saveBtnEl);
-
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
-    //
-    // TODO: Add code to apply the past, present, or future class to each time
-    // block by comparing the id to the current hour. HINTS: How can the id
-    // attribute of each time-block be used to conditionally add or remove the
-    // past, present, and future classes? How can Day.js be used to get the
-    // current hour in 24-hour time?
-    //
-    // TODO: Add code to get any user input that was saved in localStorage and set
-    // the values of the corresponding textarea elements. HINT: How can the id
-    // attribute of each time-block be used to do this?
+  init();
 
   displayCurrentDay();
   setInterval(displayCurrentDay, 1000);
+
+  saveBtnEl.addEventListener('click', timeBlockEl);
   
   printDescriptionData();
