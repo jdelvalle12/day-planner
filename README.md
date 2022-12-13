@@ -23,6 +23,9 @@ Updating HTML elements, using day.js to add a time and date onto the scheduler, 
 
 ## Link to Website
 
-
+https://jdelvalle12.github.io/day-planner/ 
 
 ## Screenshot
+
+![image](https://user-images.githubusercontent.com/104731082/207221790-7bf2be63-b7db-429b-87b9-5ff106530406.png)
+![image](https://user-images.githubusercontent.com/104731082/207221821-043900d2-0def-4125-a631-969c92bb1100.png)
